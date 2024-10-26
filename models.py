@@ -1,25 +1,21 @@
-from sqlalchemy import Column, Integer, String, create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from flask_sqlalchemy import SQLAlchemy
 
-DATABASE_URL = 'sqlite:///./people.db'
-
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+db = SQLAlchemy()
 
 
-class People(Base):
-    __tablename__ = 'people'
-    id = Column(Integer, primary_key=True, index=True)
-    phone = Column(String(20), index=True)
-    name = Column(String(80))
-    answer = Column(String(200))
+class People(db.Model):
+    __tablename__='people'
+    id = db.Column(db.Integer, primary_key=True)
+    phone = db.Column(db.String(20))
+    name = db.Column(db.String(80))
+    answer = db.Column(db.String(200))
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'phone': self.phone,
+            'name': self.name,
+            'answer': self.answer,
+        }
+
