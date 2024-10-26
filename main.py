@@ -63,7 +63,7 @@ def post_people():
     db.session.add(person)
     db.session.commit()
 
-    message = f"Добавлен новый человек:\nИмя: {person.name}\nТелефон: {person.phone}\nВопрос: {person.answer}"
+    message = f"Пришла заявка:\nИмя: {person.name}\nТелефон: {person.phone}\nВопрос: {person.answer}"
     if send_to_telegram(message):
         return jsonify(person.to_dict()), 201
     else:
